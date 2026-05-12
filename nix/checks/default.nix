@@ -1,7 +1,8 @@
 {pkgs}: let
-  formatChecks = import ./format.nix {inherit pkgs;};
+  format-checks = import ./format.nix {inherit pkgs;};
 in
   {
-    build-all = import ./build.nix {inherit pkgs;};
+    tests = import ./tests.nix {inherit pkgs;};
+    build-debug = import ./build.nix {inherit pkgs;};
   }
-  // formatChecks
+  // format-checks

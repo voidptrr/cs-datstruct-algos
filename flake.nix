@@ -18,10 +18,6 @@
 
         formatter = pkgs.alejandra;
 
-        apps = {
-          default = import ./nix/app.nix {inherit pkgs;};
-        };
-
         checks = import ./nix/checks {inherit pkgs;};
       };
     };

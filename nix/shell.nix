@@ -1,5 +1,5 @@
 {pkgs}: let
-  formatAll = pkgs.writeShellApplication {
+  format-all = pkgs.writeShellApplication {
     name = "format-all";
     runtimeInputs = [
       pkgs.alejandra
@@ -11,13 +11,13 @@
 
       alejandra .
 
-      find src -type f \( -name '*.c' -o -name '*.h' \) -print0 | xargs -0 --no-run-if-empty clang-format -i
+      find src tests -type f \( -name '*.c' -o -name '*.h' \) -print0 | xargs -0 --no-run-if-empty clang-format -i
     '';
   };
 in
   pkgs.mkShell {
     packages = with pkgs; [
       gcc
-      formatAll
+      format-all
     ];
   }

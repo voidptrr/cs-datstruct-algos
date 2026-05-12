@@ -1,5 +1,5 @@
-{pkgs}: let
-  formatNix =
+{pkgs}: {
+  format-nix =
     pkgs.runCommand "format-nix-check" {
       src = ../../.;
       nativeBuildInputs = [
@@ -11,13 +11,13 @@
       chmod -R +w source
       cd source
 
-      ${pkgs.alejandra}/bin/alejandra --check .
+      alejandra --check .
 
       mkdir -p "$out"
       touch "$out/passed"
     '';
 
-  formatC =
+  format-c =
     pkgs.runCommand "format-c-check" {
       src = ../../.;
       nativeBuildInputs = [
@@ -30,10 +30,10 @@
       chmod -R +w source
       cd source
 
-      files="$(${pkgs.findutils}/bin/find src -type f \( -name '*.c' -o -name '*.h' \) | ${pkgs.coreutils}/bin/sort)"
+      files="$(find src tests -type f \( -name '*.c' -o -name '*.h' \) | sort)"
 
       if [ -z "$files" ]; then
-        echo "No C files found under src/. Skipping C format check."
+        echo "No C files found under src/ or tests/. Skipping C format check."
         mkdir -p "$out"
         touch "$out/passed"
         exit 0
@@ -41,7 +41,7 @@
 
       while IFS= read -r file; do
         [ -z "$file" ] && continue
-        ${pkgs.clang-tools}/bin/clang-format --dry-run --Werror "$file"
+        clang-format --dry-run --Werror "$file"
       done <<EOF
       $files
       EOF
@@ -49,7 +49,4 @@
       mkdir -p "$out"
       touch "$out/passed"
     '';
-in {
-  format-nix = formatNix;
-  format-c = formatC;
 }

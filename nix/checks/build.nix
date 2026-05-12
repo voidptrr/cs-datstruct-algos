@@ -1,8 +1,7 @@
 {pkgs}:
-pkgs.runCommand "build-all-targets-check" {
+pkgs.runCommand "build-debug-sanitized-check" {
   src = ../../.;
   nativeBuildInputs = [
-    pkgs.cmake
     pkgs.gcc
     pkgs.coreutils
     pkgs.findutils
@@ -13,25 +12,26 @@ pkgs.runCommand "build-all-targets-check" {
   chmod -R +w source
   cd source
 
-  targets="$(${pkgs.findutils}/bin/find src -type f -name '*.c' -printf '%h\n' | ${pkgs.gnused}/bin/sed 's#^src/##' | ${pkgs.coreutils}/bin/sort -u)"
+  export CFLAGS="-g3 -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address,undefined -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wstrict-prototypes"
+  export ASAN_OPTIONS="detect_leaks=1:abort_on_error=1"
+  export UBSAN_OPTIONS="print_stacktrace=1:halt_on_error=1"
 
-  if [ -z "$targets" ]; then
-    echo "No C targets found under src/. Skipping build check."
-    mkdir -p "$out"
-    touch "$out/passed"
-    exit 0
-  fi
+  src_files="$(find src -type f -name '*.c' | sort)"
 
-  while IFS= read -r target; do
-    [ -z "$target" ] && continue
-    echo "Checking build for: $target"
-    build_dir="build-check/$target"
-    ${pkgs.coreutils}/bin/mkdir -p "$build_dir"
-    ${pkgs.cmake}/bin/cmake -S . -B "$build_dir" -DTARGET="$target" -DCMAKE_BUILD_TYPE=Release
-    ${pkgs.cmake}/bin/cmake --build "$build_dir"
-  done <<EOF
-  $targets
+  if [ -n "$src_files" ]; then
+    echo "Compiling all src/*.c with debug+sanitizer flags"
+    while IFS= read -r src_file; do
+      [ -z "$src_file" ] && continue
+      obj_dir="build-debug-check/obj"
+      mkdir -p "$obj_dir"
+      obj_name="$(printf '%s' "$src_file" | sed 's#/#-#g').o"
+      cc $CFLAGS -I src -c "$src_file" -o "$obj_dir/$obj_name"
+    done <<EOF
+  $src_files
   EOF
+  else
+    echo "No C source files found under src/. Skipping src compile check."
+  fi
 
   mkdir -p "$out"
   touch "$out/passed"
