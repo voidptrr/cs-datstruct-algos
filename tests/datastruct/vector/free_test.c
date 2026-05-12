@@ -20,8 +20,8 @@ static int test_vector_free_null_buffer(void) {
     struct vector v = {0};
 
     status = vector_free(&v);
-    if (status != VECTOR_ERR_NULL) {
-        fprintf(stderr, "vector_free(&v) with NULL buffer should return VECTOR_ERR_NULL\n");
+    if (status != VECTOR_OK) {
+        fprintf(stderr, "vector_free(&v) with NULL buffer should return VECTOR_OK\n");
         return 1;
     }
 
@@ -41,6 +41,17 @@ static int test_vector_free_valid_vector(void) {
     status = vector_free(&v);
     if (status != VECTOR_OK) {
         fprintf(stderr, "vector_free(&v) should return VECTOR_OK\n");
+        return 1;
+    }
+
+    if (v.buffer != NULL || v.size != 0 || v.capacity != 0) {
+        fprintf(stderr, "vector_free(&v) should reset buffer, size, and capacity\n");
+        return 1;
+    }
+
+    status = vector_free(&v);
+    if (status != VECTOR_OK) {
+        fprintf(stderr, "vector_free(&v) should be idempotent\n");
         return 1;
     }
 

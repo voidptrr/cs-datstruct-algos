@@ -14,7 +14,8 @@ struct vector {
 
 enum vector_status vector_init(struct vector *vector, size_t elem_size);
 enum vector_status vector_push(struct vector *vector, const void *element);
-enum vector_status vector_free(const struct vector *vector);
+enum vector_status vector_free(struct vector *vector);
+void *vector_pop(struct vector *vector);
 
 size_t vector_size(struct vector *vector);
 

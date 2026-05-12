@@ -50,12 +50,29 @@ enum vector_status vector_push(struct vector *vector, const void *element) {
     return VECTOR_OK;
 }
 
-enum vector_status vector_free(const struct vector *vector) {
-    if (vector == NULL || vector->buffer == NULL) {
+void *vector_pop(struct vector *vector) {
+    if (vector == NULL || vector->size == 0) {
+        return NULL;
+    }
+
+    vector->size -= 1;
+
+    uint8_t *base = (uint8_t *)vector->buffer;
+    void *dst = base + (vector->size * vector->elem_size);
+
+    return dst;
+}
+
+enum vector_status vector_free(struct vector *vector) {
+    if (vector == NULL) {
         return VECTOR_ERR_NULL;
     }
 
     free(vector->buffer);
+    vector->buffer = NULL;
+    vector->size = 0;
+    vector->capacity = 0;
+
     return VECTOR_OK;
 }
 
