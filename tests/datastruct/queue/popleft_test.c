@@ -15,8 +15,8 @@ static int test_queue_popleft_null_queue(void) {
 }
 
 static int test_queue_popleft_null_out(void) {
-    cstd_status status;
-    cstd_queue q;
+    enum cstd_status status;
+    struct cstd_queue q;
 
     status = cstd_queue_init(&q, sizeof(int));
     if (status != CSTD_OK) {
@@ -36,8 +36,8 @@ static int test_queue_popleft_null_out(void) {
 }
 
 static int test_queue_popleft_empty_queue(void) {
-    cstd_status status;
-    cstd_queue q;
+    enum cstd_status status;
+    struct cstd_queue q;
     int out = 0;
 
     status = cstd_queue_init(&q, sizeof(int));
@@ -58,8 +58,8 @@ static int test_queue_popleft_empty_queue(void) {
 }
 
 static int test_queue_popleft_fifo_order(void) {
-    cstd_status status;
-    cstd_queue q;
+    enum cstd_status status;
+    struct cstd_queue q;
     int values[] = {7, 11, 13};
     int out = 0;
     size_t i;

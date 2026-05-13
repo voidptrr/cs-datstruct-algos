@@ -5,7 +5,7 @@
 #include "datastruct/queue.h"
 
 static int test_queue_init_null_pointer(void) {
-    cstd_status status;
+    enum cstd_status status;
 
     status = cstd_queue_init(NULL, sizeof(int));
     if (status != CSTD_ERR_NULL) {
@@ -17,8 +17,8 @@ static int test_queue_init_null_pointer(void) {
 }
 
 static int test_queue_init_valid_pointer(void) {
-    cstd_status status;
-    cstd_queue q;
+    enum cstd_status status;
+    struct cstd_queue q;
 
     status = cstd_queue_init(&q, sizeof(int));
     if (status != CSTD_OK) {

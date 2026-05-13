@@ -6,7 +6,7 @@
 
 #define CSTD_QUEUE_DEFAULT_CAPACITY 16
 
-cstd_status cstd_queue_init(cstd_queue *queue, size_t elem_size) {
+enum cstd_status cstd_queue_init(struct cstd_queue *queue, size_t elem_size) {
     if (queue == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -26,7 +26,7 @@ cstd_status cstd_queue_init(cstd_queue *queue, size_t elem_size) {
     return CSTD_OK;
 }
 
-cstd_status cstd_queue_push(cstd_queue *queue, const void *element) {
+enum cstd_status cstd_queue_push(struct cstd_queue *queue, const void *element) {
     if (queue == NULL || element == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -74,7 +74,7 @@ cstd_status cstd_queue_push(cstd_queue *queue, const void *element) {
     return CSTD_OK;
 }
 
-cstd_status cstd_queue_popleft(cstd_queue *queue, void *out) {
+enum cstd_status cstd_queue_popleft(struct cstd_queue *queue, void *out) {
     if (queue == NULL || out == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -93,7 +93,7 @@ cstd_status cstd_queue_popleft(cstd_queue *queue, void *out) {
     return CSTD_OK;
 }
 
-cstd_status cstd_queue_popback(cstd_queue *queue, void *out) {
+enum cstd_status cstd_queue_popback(struct cstd_queue *queue, void *out) {
     if (queue == NULL || out == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -113,7 +113,7 @@ cstd_status cstd_queue_popback(cstd_queue *queue, void *out) {
     return CSTD_OK;
 }
 
-cstd_status cstd_queue_free(cstd_queue *queue) {
+enum cstd_status cstd_queue_free(struct cstd_queue *queue) {
     if (queue == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -128,7 +128,7 @@ cstd_status cstd_queue_free(cstd_queue *queue) {
     return CSTD_OK;
 }
 
-size_t cstd_queue_size(const cstd_queue *queue) {
+size_t cstd_queue_size(const struct cstd_queue *queue) {
     if (queue == NULL) {
         return 0;
     }

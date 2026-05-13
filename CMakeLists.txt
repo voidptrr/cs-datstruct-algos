@@ -13,3 +13,5 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 
 include(cmake/tests.cmake)
 dsa_discover_tests()
+
+include(cmake/benchmarks.cmake)

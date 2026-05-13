@@ -6,7 +6,7 @@
 
 #define CSTD_VECTOR_DEFAULT_CAPACITY 16
 
-cstd_status cstd_vector_init(cstd_vector *vector, size_t elem_size) {
+enum cstd_status cstd_vector_init(struct cstd_vector *vector, size_t elem_size) {
     if (vector == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -24,7 +24,7 @@ cstd_status cstd_vector_init(cstd_vector *vector, size_t elem_size) {
     return CSTD_OK;
 }
 
-cstd_status cstd_vector_push(cstd_vector *vector, const void *element) {
+enum cstd_status cstd_vector_push(struct cstd_vector *vector, const void *element) {
     if (vector == NULL || element == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -48,7 +48,7 @@ cstd_status cstd_vector_push(cstd_vector *vector, const void *element) {
     return CSTD_OK;
 }
 
-cstd_status cstd_vector_pop(cstd_vector *vector, void *out) {
+enum cstd_status cstd_vector_pop(struct cstd_vector *vector, void *out) {
     if (vector == NULL || out == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -66,7 +66,7 @@ cstd_status cstd_vector_pop(cstd_vector *vector, void *out) {
     return CSTD_OK;
 }
 
-cstd_status cstd_vector_free(cstd_vector *vector) {
+enum cstd_status cstd_vector_free(struct cstd_vector *vector) {
     if (vector == NULL) {
         return CSTD_ERR_NULL;
     }
@@ -79,7 +79,7 @@ cstd_status cstd_vector_free(cstd_vector *vector) {
     return CSTD_OK;
 }
 
-size_t cstd_vector_size(const cstd_vector *vector) {
+size_t cstd_vector_size(const struct cstd_vector *vector) {
     if (vector == NULL) {
         return 0;
     }

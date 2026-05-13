@@ -23,12 +23,12 @@ if [ -z "$branch_name" ]; then
   exit 1
 fi
 
-branch_regex='^(ds|algo|nix|ci|docs)-[a-z0-9][a-z0-9-]*$'
+branch_regex='^(ds|algo|nix|ci|docs|bench)-[a-z0-9][a-z0-9-]*$'
 
 if ! printf '%s' "$branch_name" | grep -Eq "$branch_regex"; then
   echo "Invalid branch name: $branch_name"
   echo "Expected format: <area>-<topic>"
-  echo "Allowed areas: ds, algo, nix, ci, docs"
+  echo "Allowed areas: ds, algo, nix, ci, docs, bench"
   echo "Example: ds-vector-push"
   exit 1
 fi

@@ -11,6 +11,7 @@
     devShells.default = pkgs.mkShell {
       packages = [
         pkgs.gcc
+        config.packages.bench-all
         config.packages.format-all
         config.packages.format-check
         config.packages.test-all

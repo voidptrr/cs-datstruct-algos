@@ -5,8 +5,8 @@
 #include "datastruct/vector.h"
 
 static int test_vector_push_appends_value(void) {
-    cstd_status status;
-    cstd_vector v;
+    enum cstd_status status;
+    struct cstd_vector v;
     int value = 42;
 
     status = cstd_vector_init(&v, sizeof(int));
@@ -39,8 +39,8 @@ static int test_vector_push_appends_value(void) {
 }
 
 static int test_vector_push_grows_capacity(void) {
-    cstd_status status;
-    cstd_vector v;
+    enum cstd_status status;
+    struct cstd_vector v;
     size_t initial_capacity;
     size_t i;
 
@@ -91,8 +91,8 @@ static int test_vector_push_grows_capacity(void) {
 }
 
 static int test_vector_push_null_pointers(void) {
-    cstd_status status;
-    cstd_vector v;
+    enum cstd_status status;
+    struct cstd_vector v;
     int value = 1;
 
     status = cstd_vector_push(NULL, &value);

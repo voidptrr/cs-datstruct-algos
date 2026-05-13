@@ -4,7 +4,7 @@
 #include "datastruct/vector.h"
 
 static int test_vector_free_null_pointer(void) {
-    cstd_status status;
+    enum cstd_status status;
 
     status = cstd_vector_free(NULL);
     if (status != CSTD_ERR_NULL) {
@@ -16,8 +16,8 @@ static int test_vector_free_null_pointer(void) {
 }
 
 static int test_vector_free_null_buffer(void) {
-    cstd_status status;
-    cstd_vector v = {0};
+    enum cstd_status status;
+    struct cstd_vector v = {0};
 
     status = cstd_vector_free(&v);
     if (status != CSTD_OK) {
@@ -29,8 +29,8 @@ static int test_vector_free_null_buffer(void) {
 }
 
 static int test_vector_free_valid_vector(void) {
-    cstd_status status;
-    cstd_vector v;
+    enum cstd_status status;
+    struct cstd_vector v;
 
     status = cstd_vector_init(&v, sizeof(int));
     if (status != CSTD_OK) {

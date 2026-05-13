@@ -1,4 +1,5 @@
 {pkgs}: {
+  bench-all = import ./bench-all.nix {inherit pkgs;};
   code-check = import ./code-check.nix {inherit pkgs;};
   format-all = import ./format-all.nix {inherit pkgs;};
   format-check = import ./format-check.nix {inherit pkgs;};
