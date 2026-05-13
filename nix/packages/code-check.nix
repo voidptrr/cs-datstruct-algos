@@ -21,6 +21,6 @@ pkgs.writeShellApplication {
       -DCMAKE_EXE_LINKER_FLAGS="$hardening_linker_flags"
 
     cmake --build build/hardened
-    ctest --test-dir build/hardened --output-on-failure -LE benchmark
+    ctest --test-dir build/hardened --output-on-failure
   '';
 }
