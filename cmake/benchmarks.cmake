@@ -21,8 +21,5 @@ function(cstd_discover_benchmarks)
     add_executable(${TARGET_NAME} "${CMAKE_SOURCE_DIR}/${BENCH_FILE_REL}" ${SOURCE_FILE})
     target_include_directories(${TARGET_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include" "${CMAKE_SOURCE_DIR}/src" "${CMAKE_SOURCE_DIR}/benchmarks")
     target_compile_definitions(${TARGET_NAME} PRIVATE _POSIX_C_SOURCE=200809L)
-
-    add_test(NAME "benchmark/${BENCH_NAME_DASH}" COMMAND ${TARGET_NAME})
-    set_tests_properties("benchmark/${BENCH_NAME_DASH}" PROPERTIES LABELS "benchmark;datastruct;${DATASTRUCT_NAME}")
   endforeach()
 endfunction()
