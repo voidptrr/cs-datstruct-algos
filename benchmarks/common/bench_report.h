@@ -14,22 +14,21 @@
 #include "bench_time.h"
 #include "status.h"
 
-struct cstd_bench_case {
+typedef struct {
     const char *name;
-    enum cstd_status (*trial_fn)(uint64_t ops, double *ns_per_op);
-};
+    cstd_status (*trial_fn)(uint64_t ops, double *ns_per_op);
+} cstd_bench_case;
 
-struct cstd_bench_result {
+typedef struct {
     double min_ns;
     double median_ns;
     double p95_ns;
     double ops_per_sec;
-};
+} cstd_bench_result;
 
-static inline enum cstd_status cstd_bench_run_case(const struct cstd_bench_case *bench_case,
-                                                   uint64_t warmup_ops, uint64_t measured_ops,
-                                                   size_t trials,
-                                                   struct cstd_bench_result *out_result) {
+static inline cstd_status cstd_bench_run_case(const cstd_bench_case *bench_case,
+                                              uint64_t warmup_ops, uint64_t measured_ops,
+                                              size_t trials, cstd_bench_result *out_result) {
     double ns_per_op[64];
     size_t len = sizeof(ns_per_op) / sizeof(ns_per_op[0]);
 
@@ -61,8 +60,8 @@ static inline enum cstd_status cstd_bench_run_case(const struct cstd_bench_case 
     return CSTD_OK;
 }
 
-static inline void cstd_bench_print_table(const char *title, const struct cstd_bench_case *cases,
-                                          const struct cstd_bench_result *results, size_t case_count,
+static inline void cstd_bench_print_table(const char *title, const cstd_bench_case *cases,
+                                          const cstd_bench_result *results, size_t case_count,
                                           uint64_t measured_ops, size_t trials) {
     printf("\n%s benchmark\n", title);
     printf("ops=%llu trials=%zu\n", (unsigned long long)measured_ops, trials);

@@ -8,9 +8,9 @@
 #define CSTD_BENCH_MEASURED_OPS 10000000ULL
 #define CSTD_BENCH_TRIALS 30U
 
-static enum cstd_status run_vector_steady_trial(uint64_t ops, double *ns_per_op) {
-    struct cstd_vector vector;
-    enum cstd_status status = cstd_vector_init(&vector, sizeof(int));
+static cstd_status run_vector_steady_trial(uint64_t ops, double *ns_per_op) {
+    cstd_vector vector;
+    cstd_status status = cstd_vector_init(&vector, sizeof(int));
     if (status != CSTD_OK) {
         return status;
     }
@@ -41,9 +41,9 @@ static enum cstd_status run_vector_steady_trial(uint64_t ops, double *ns_per_op)
     return CSTD_OK;
 }
 
-static enum cstd_status run_vector_growth_trial(uint64_t ops, double *ns_per_op) {
-    struct cstd_vector vector;
-    enum cstd_status status = cstd_vector_init(&vector, sizeof(int));
+static cstd_status run_vector_growth_trial(uint64_t ops, double *ns_per_op) {
+    cstd_vector vector;
+    cstd_status status = cstd_vector_init(&vector, sizeof(int));
     if (status != CSTD_OK) {
         return status;
     }
@@ -80,11 +80,11 @@ static enum cstd_status run_vector_growth_trial(uint64_t ops, double *ns_per_op)
 }
 
 int main(void) {
-    struct cstd_bench_case cases[] = {
+    cstd_bench_case cases[] = {
         {.name = "steady_push_pop", .trial_fn = run_vector_steady_trial},
         {.name = "growth_push_pop", .trial_fn = run_vector_growth_trial},
     };
-    struct cstd_bench_result results[sizeof(cases) / sizeof(cases[0])];
+    cstd_bench_result results[sizeof(cases) / sizeof(cases[0])];
 
     for (size_t i = 0; i < (sizeof(cases) / sizeof(cases[0])); i++) {
         if (cstd_bench_run_case(&cases[i], CSTD_BENCH_WARMUP_OPS, CSTD_BENCH_MEASURED_OPS,

@@ -13,10 +13,10 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 
 option(CSTD_BUILD_BENCHMARKS "Build benchmark executables" ON)
 
-include(cmake/tests.cmake)
+include(tooling/cmake/tests.cmake)
 cstd_discover_tests()
 
 if(CSTD_BUILD_BENCHMARKS)
-  include(cmake/benchmarks.cmake)
+  include(tooling/cmake/benchmarks.cmake)
   cstd_discover_benchmarks()
 endif()
