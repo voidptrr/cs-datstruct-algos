@@ -5,8 +5,8 @@
 #include "datastruct/queue.h"
 
 static int test_queue_push_appends_value(void) {
-    enum cstd_status status;
-    struct cstd_queue q;
+    cstd_status status;
+    cstd_queue q;
     int value = 42;
 
     status = cstd_queue_init(&q, sizeof(int));
@@ -45,8 +45,8 @@ static int test_queue_push_appends_value(void) {
 }
 
 static int test_queue_push_null_pointers(void) {
-    enum cstd_status status;
-    struct cstd_queue q;
+    cstd_status status;
+    cstd_queue q;
     int value = 1;
 
     status = cstd_queue_push(NULL, &value);
@@ -73,8 +73,8 @@ static int test_queue_push_null_pointers(void) {
 }
 
 static int test_queue_push_wraparound_growth(void) {
-    enum cstd_status status;
-    struct cstd_queue q;
+    cstd_status status;
+    cstd_queue q;
     int pushed = 99;
     int popped = 0;
     int i;

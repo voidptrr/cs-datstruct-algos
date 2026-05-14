@@ -12,7 +12,7 @@ pkgs.writeShellApplication {
     timestamp="$(date +%Y-%m-%d_%H%M%S)"
     short_sha="$(git rev-parse --short HEAD 2>/dev/null || printf '%s' nogit)"
     full_sha="$(git rev-parse HEAD 2>/dev/null || printf '%s' nogit)"
-    log_dir="benchmarks/results"
+    log_dir="artifacts/benchmark-logs"
     log_file="$log_dir/''${timestamp}_''${short_sha}.log"
 
     mkdir -p "$log_dir"

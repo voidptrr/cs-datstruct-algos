@@ -15,8 +15,8 @@ static int test_vector_pop_null_vector(void) {
 }
 
 static int test_vector_pop_null_out(void) {
-    enum cstd_status status;
-    struct cstd_vector v;
+    cstd_status status;
+    cstd_vector v;
 
     status = cstd_vector_init(&v, sizeof(int));
     if (status != CSTD_OK) {
@@ -40,8 +40,8 @@ static int test_vector_pop_null_out(void) {
 }
 
 static int test_vector_pop_empty_vector(void) {
-    enum cstd_status status;
-    struct cstd_vector v;
+    cstd_status status;
+    cstd_vector v;
 
     status = cstd_vector_init(&v, sizeof(int));
     if (status != CSTD_OK) {
@@ -73,8 +73,8 @@ static int test_vector_pop_empty_vector(void) {
 }
 
 static int test_vector_pop_returns_last_value(void) {
-    enum cstd_status status;
-    struct cstd_vector v;
+    cstd_status status;
+    cstd_vector v;
     int first = 7;
     int second = 11;
     int popped = 0;

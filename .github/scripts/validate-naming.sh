@@ -23,7 +23,7 @@ if [ -z "$branch_name" ]; then
   exit 1
 fi
 
-branch_regex='^(ds|algo|nix|ci|docs|bench)-[a-z0-9][a-z0-9-]*$'
+branch_regex='^(ds|algo|nix|ci|docs|bench|chore)-[a-z0-9][a-z0-9-]*$'
 
 if ! printf '%s' "$branch_name" | grep -Eq "$branch_regex"; then
   echo "Invalid branch name: $branch_name"
