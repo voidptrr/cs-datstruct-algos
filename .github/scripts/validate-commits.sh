@@ -55,10 +55,11 @@ if [ -n "$invalid_subjects" ]; then
   echo "Invalid commit subjects found in range: $commit_range"
   printf '%s\n' "$invalid_subjects"
   echo "Expected format: <area>(<specific>): <summary> or <area>: <summary>"
-  echo "Allowed areas: ds, algo, nix, ci, docs, bench"
+  echo "Allowed areas: ds, algo, nix, ci, docs, bench, chore"
   echo "Examples:"
   echo "  ds(vector): add push operation"
   echo "  docs: update vector API notes"
   echo "  nix(checks): split build and format checks"
+  echo "  chore: format linked_list files"
   exit 1
 fi

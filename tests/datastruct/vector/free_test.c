@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "datastruct/vector.h"
+#include "cstd/datastruct/vector.h"
 
 static int test_vector_free_null_pointer(void) {
     cstd_status status;

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "datastruct/queue.h"
+#include "cstd/datastruct/queue.h"
 
 static int test_queue_push_appends_value(void) {
     cstd_status status;

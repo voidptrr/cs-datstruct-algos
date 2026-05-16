@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 #include "bench_time.h"
-#include "status.h"
+#include "cstd/status.h"
 
 typedef struct {
     const char *name;

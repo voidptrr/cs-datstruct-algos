@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "datastruct/queue.h"
+#include "cstd/datastruct/queue.h"
 
 #define CSTD_QUEUE_DEFAULT_CAPACITY 16
 
@@ -45,6 +45,10 @@ static cstd_status cstd_queue_grow(cstd_queue *queue) {
 cstd_status cstd_queue_init(cstd_queue *queue, size_t elem_size) {
     if (queue == NULL) {
         return CSTD_ERR_NULL;
+    }
+
+    if (elem_size == 0) {
+        return CSTD_ERR_RANGE;
     }
 
     void *buffer = malloc(elem_size * CSTD_QUEUE_DEFAULT_CAPACITY);
@@ -144,6 +148,39 @@ cstd_status cstd_queue_popback(cstd_queue *queue, void *out) {
     return CSTD_OK;
 }
 
+cstd_status cstd_queue_peekleft(const cstd_queue *queue, void *out) {
+    if (queue == NULL || out == NULL) {
+        return CSTD_ERR_NULL;
+    }
+
+    if (queue->size == 0) {
+        return CSTD_ERR_EMPTY;
+    }
+
+    uint8_t *base = (uint8_t *)queue->buffer;
+    void *src = base + (queue->head * queue->elem_size);
+    memcpy(out, src, queue->elem_size);
+
+    return CSTD_OK;
+}
+
+cstd_status cstd_queue_peekback(const cstd_queue *queue, void *out) {
+    if (queue == NULL || out == NULL) {
+        return CSTD_ERR_NULL;
+    }
+
+    if (queue->size == 0) {
+        return CSTD_ERR_EMPTY;
+    }
+
+    size_t last_index = (queue->tail + queue->capacity - 1) % queue->capacity;
+    uint8_t *base = (uint8_t *)queue->buffer;
+    void *src = base + (last_index * queue->elem_size);
+    memcpy(out, src, queue->elem_size);
+
+    return CSTD_OK;
+}
+
 cstd_status cstd_queue_free(cstd_queue *queue) {
     if (queue == NULL) {
         return CSTD_ERR_NULL;
@@ -165,4 +202,8 @@ size_t cstd_queue_size(const cstd_queue *queue) {
     }
 
     return queue->size;
+}
+
+bool cstd_queue_is_empty(const cstd_queue *queue) {
+    return cstd_queue_size(queue) == 0;
 }

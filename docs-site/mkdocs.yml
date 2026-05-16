@@ -1,0 +1,20 @@
+site_name: cstd
+site_description: Enhanced C standard-style containers
+site_url: https://voidptrr.github.io/cstd/
+repo_url: https://github.com/voidptrr/cstd
+repo_name: voidptrr/cstd
+docs_dir: docs
+site_dir: build
+theme:
+  name: material
+  palette:
+    scheme: slate
+extra_css:
+  - stylesheets/extra.css
+nav:
+  - Overview: index.md
+  - Getting Started: getting-started.md
+  - Data Structures:
+      - Vector: data-structures/vector.md
+      - Queue: data-structures/queue.md
+      - Linked List: data-structures/linked-list.md

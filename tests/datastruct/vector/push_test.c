@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "datastruct/vector.h"
+#include "cstd/datastruct/vector.h"
 
 static int test_vector_push_appends_value(void) {
     cstd_status status;

@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "common/bench_payload.h"
 #include "common/bench_report.h"
-#include "datastruct/queue.h"
+#include "cstd/datastruct/queue.h"
 
 #define CSTD_BENCH_WARMUP_OPS 100000ULL
 #define CSTD_BENCH_MEASURED_OPS 10000000ULL
@@ -11,14 +12,14 @@
 
 static cstd_status run_queue_steady_trial(uint64_t ops, double *ns_per_op) {
     cstd_queue queue;
-    cstd_status status = cstd_queue_init(&queue, sizeof(int));
+    cstd_status status = cstd_queue_init(&queue, sizeof(cstd_bench_payload));
     if (status != CSTD_OK) {
         return status;
     }
 
     /* Prefill before timing so steady-state avoids empty-queue edges. */
     for (int i = 0; i < 16; i++) {
-        int value = i;
+        cstd_bench_payload value = cstd_bench_payload_make((uint64_t)i);
         if (cstd_queue_push(&queue, &value) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
@@ -27,8 +28,8 @@ static cstd_status run_queue_steady_trial(uint64_t ops, double *ns_per_op) {
 
     uint64_t start = cstd_bench_now_ns();
     for (uint64_t i = 0; i < ops; i++) {
-        int out;
-        int value = (int)i;
+        cstd_bench_payload out;
+        cstd_bench_payload value = cstd_bench_payload_make(i);
         if (cstd_queue_popleft(&queue, &out) != CSTD_OK || cstd_queue_push(&queue, &value) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
@@ -44,20 +45,20 @@ static cstd_status run_queue_steady_trial(uint64_t ops, double *ns_per_op) {
 
 static cstd_status run_queue_growth_trial(uint64_t ops, double *ns_per_op) {
     cstd_queue queue;
-    cstd_status status = cstd_queue_init(&queue, sizeof(int));
+    cstd_status status = cstd_queue_init(&queue, sizeof(cstd_bench_payload));
     if (status != CSTD_OK) {
         return status;
     }
 
     uint64_t start = cstd_bench_now_ns();
     for (uint64_t i = 0; i < ops; i++) {
-        int value = (int)i;
+        cstd_bench_payload value = cstd_bench_payload_make(i);
         if (cstd_queue_push(&queue, &value) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
         }
         if ((i & 1ULL) == 1ULL) {
-            int out;
+            cstd_bench_payload out;
             if (cstd_queue_popleft(&queue, &out) != CSTD_OK) {
                 cstd_queue_free(&queue);
                 return CSTD_ERR_STATE;
@@ -66,7 +67,7 @@ static cstd_status run_queue_growth_trial(uint64_t ops, double *ns_per_op) {
     }
 
     while (cstd_queue_size(&queue) > 0U) {
-        int out;
+        cstd_bench_payload out;
         if (cstd_queue_popleft(&queue, &out) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
@@ -80,16 +81,16 @@ static cstd_status run_queue_growth_trial(uint64_t ops, double *ns_per_op) {
     return CSTD_OK;
 }
 
-static enum cstd_status run_queue_steady_pushfront_trial(uint64_t ops, double *ns_per_op) {
-    struct cstd_queue queue;
-    enum cstd_status status = cstd_queue_init(&queue, sizeof(int));
+static cstd_status run_queue_steady_pushfront_trial(uint64_t ops, double *ns_per_op) {
+    cstd_queue queue;
+    cstd_status status = cstd_queue_init(&queue, sizeof(cstd_bench_payload));
     if (status != CSTD_OK) {
         return status;
     }
 
     /* Prefill before timing so steady-state avoids empty-queue edges. */
     for (int i = 0; i < 16; i++) {
-        int value = i;
+        cstd_bench_payload value = cstd_bench_payload_make((uint64_t)i);
         if (cstd_queue_pushfront(&queue, &value) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
@@ -98,8 +99,8 @@ static enum cstd_status run_queue_steady_pushfront_trial(uint64_t ops, double *n
 
     uint64_t start = cstd_bench_now_ns();
     for (uint64_t i = 0; i < ops; i++) {
-        int out;
-        int value = (int)i;
+        cstd_bench_payload out;
+        cstd_bench_payload value = cstd_bench_payload_make(i);
         if (cstd_queue_popback(&queue, &out) != CSTD_OK ||
             cstd_queue_pushfront(&queue, &value) != CSTD_OK) {
             cstd_queue_free(&queue);
@@ -114,22 +115,22 @@ static enum cstd_status run_queue_steady_pushfront_trial(uint64_t ops, double *n
     return CSTD_OK;
 }
 
-static enum cstd_status run_queue_growth_pushfront_trial(uint64_t ops, double *ns_per_op) {
-    struct cstd_queue queue;
-    enum cstd_status status = cstd_queue_init(&queue, sizeof(int));
+static cstd_status run_queue_growth_pushfront_trial(uint64_t ops, double *ns_per_op) {
+    cstd_queue queue;
+    cstd_status status = cstd_queue_init(&queue, sizeof(cstd_bench_payload));
     if (status != CSTD_OK) {
         return status;
     }
 
     uint64_t start = cstd_bench_now_ns();
     for (uint64_t i = 0; i < ops; i++) {
-        int value = (int)i;
+        cstd_bench_payload value = cstd_bench_payload_make(i);
         if (cstd_queue_pushfront(&queue, &value) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
         }
         if ((i & 1ULL) == 1ULL) {
-            int out;
+            cstd_bench_payload out;
             if (cstd_queue_popback(&queue, &out) != CSTD_OK) {
                 cstd_queue_free(&queue);
                 return CSTD_ERR_STATE;
@@ -138,7 +139,7 @@ static enum cstd_status run_queue_growth_pushfront_trial(uint64_t ops, double *n
     }
 
     while (cstd_queue_size(&queue) > 0U) {
-        int out;
+        cstd_bench_payload out;
         if (cstd_queue_popback(&queue, &out) != CSTD_OK) {
             cstd_queue_free(&queue);
             return CSTD_ERR_STATE;
