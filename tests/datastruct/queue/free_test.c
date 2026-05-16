@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "datastruct/queue.h"
+#include "cstd/datastruct/queue.h"
 
 static int test_queue_free_null_pointer(void) {
     cstd_status status;

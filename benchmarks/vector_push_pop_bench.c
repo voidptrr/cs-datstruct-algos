@@ -1,8 +1,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "common/bench_payload.h"
 #include "common/bench_report.h"
-#include "datastruct/vector.h"
+#include "cstd/datastruct/vector.h"
 
 #define CSTD_BENCH_WARMUP_OPS 100000ULL
 #define CSTD_BENCH_MEASURED_OPS 10000000ULL
@@ -10,14 +11,14 @@
 
 static cstd_status run_vector_steady_trial(uint64_t ops, double *ns_per_op) {
     cstd_vector vector;
-    cstd_status status = cstd_vector_init(&vector, sizeof(int));
+    cstd_status status = cstd_vector_init(&vector, sizeof(cstd_bench_payload));
     if (status != CSTD_OK) {
         return status;
     }
 
     /* Prefill before timing so steady-state avoids empty-vector edges. */
     for (int i = 0; i < 16; i++) {
-        int value = i;
+        cstd_bench_payload value = cstd_bench_payload_make((uint64_t)i);
         if (cstd_vector_push(&vector, &value) != CSTD_OK) {
             cstd_vector_free(&vector);
             return CSTD_ERR_STATE;
@@ -26,8 +27,8 @@ static cstd_status run_vector_steady_trial(uint64_t ops, double *ns_per_op) {
 
     uint64_t start = cstd_bench_now_ns();
     for (uint64_t i = 0; i < ops; i++) {
-        int value = (int)i;
-        int out;
+        cstd_bench_payload value = cstd_bench_payload_make(i);
+        cstd_bench_payload out;
         if (cstd_vector_pop(&vector, &out) != CSTD_OK || cstd_vector_push(&vector, &value) != CSTD_OK) {
             cstd_vector_free(&vector);
             return CSTD_ERR_STATE;
@@ -43,20 +44,20 @@ static cstd_status run_vector_steady_trial(uint64_t ops, double *ns_per_op) {
 
 static cstd_status run_vector_growth_trial(uint64_t ops, double *ns_per_op) {
     cstd_vector vector;
-    cstd_status status = cstd_vector_init(&vector, sizeof(int));
+    cstd_status status = cstd_vector_init(&vector, sizeof(cstd_bench_payload));
     if (status != CSTD_OK) {
         return status;
     }
 
     uint64_t start = cstd_bench_now_ns();
     for (uint64_t i = 0; i < ops; i++) {
-        int value = (int)i;
+        cstd_bench_payload value = cstd_bench_payload_make(i);
         if (cstd_vector_push(&vector, &value) != CSTD_OK) {
             cstd_vector_free(&vector);
             return CSTD_ERR_STATE;
         }
         if ((i & 1ULL) == 1ULL) {
-            int out;
+            cstd_bench_payload out;
             if (cstd_vector_pop(&vector, &out) != CSTD_OK) {
                 cstd_vector_free(&vector);
                 return CSTD_ERR_STATE;
@@ -65,7 +66,7 @@ static cstd_status run_vector_growth_trial(uint64_t ops, double *ns_per_op) {
     }
 
     while (cstd_vector_size(&vector) > 0U) {
-        int out;
+        cstd_bench_payload out;
         if (cstd_vector_pop(&vector, &out) != CSTD_OK) {
             cstd_vector_free(&vector);
             return CSTD_ERR_STATE;

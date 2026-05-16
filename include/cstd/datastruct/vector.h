@@ -1,9 +1,10 @@
 #ifndef CSTD_DATASTRUCT_VECTOR_H
 #define CSTD_DATASTRUCT_VECTOR_H
 
+#include <stdbool.h>
 #include <stddef.h>
 
-#include "status.h"
+#include "cstd/status.h"
 
 /*
  * Generic contiguous dynamic array storage.
@@ -32,5 +33,8 @@ cstd_status cstd_vector_free(cstd_vector *vector);
 
 /* Return the number of stored elements. */
 size_t cstd_vector_size(const cstd_vector *vector);
+
+/* Return whether the vector has zero elements. */
+bool cstd_vector_is_empty(const cstd_vector *vector);
 
 #endif

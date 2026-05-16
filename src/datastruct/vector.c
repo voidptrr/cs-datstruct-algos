@@ -2,13 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "datastruct/vector.h"
+#include "cstd/datastruct/vector.h"
 
 #define CSTD_VECTOR_DEFAULT_CAPACITY 16
 
 cstd_status cstd_vector_init(cstd_vector *vector, size_t elem_size) {
     if (vector == NULL) {
         return CSTD_ERR_NULL;
+    }
+
+    if (elem_size == 0) {
+        return CSTD_ERR_RANGE;
     }
 
     void *buffer = malloc(elem_size * CSTD_VECTOR_DEFAULT_CAPACITY);
@@ -85,4 +89,8 @@ size_t cstd_vector_size(const cstd_vector *vector) {
     }
 
     return vector->size;
+}
+
+bool cstd_vector_is_empty(const cstd_vector *vector) {
+    return cstd_vector_size(vector) == 0;
 }

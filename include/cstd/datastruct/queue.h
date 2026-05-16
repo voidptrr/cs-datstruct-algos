@@ -1,9 +1,10 @@
 #ifndef CSTD_DATASTRUCT_QUEUE_H
 #define CSTD_DATASTRUCT_QUEUE_H
 
+#include <stdbool.h>
 #include <stddef.h>
 
-#include "status.h"
+#include "cstd/status.h"
 
 /*
  * Generic FIFO queue backed by a circular buffer.
@@ -37,10 +38,19 @@ cstd_status cstd_queue_popleft(cstd_queue *queue, void *out);
 /* Remove one element from the back into out. */
 cstd_status cstd_queue_popback(cstd_queue *queue, void *out);
 
+/* Copy one element from the front into out without removing it. */
+cstd_status cstd_queue_peekleft(const cstd_queue *queue, void *out);
+
+/* Copy one element from the back into out without removing it. */
+cstd_status cstd_queue_peekback(const cstd_queue *queue, void *out);
+
 /* Release owned storage and reset queue to an empty state. */
 cstd_status cstd_queue_free(cstd_queue *queue);
 
 /* Return the number of stored elements. */
 size_t cstd_queue_size(const cstd_queue *queue);
+
+/* Return whether the queue has zero elements. */
+bool cstd_queue_is_empty(const cstd_queue *queue);
 
 #endif
