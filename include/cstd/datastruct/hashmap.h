@@ -1,5 +1,5 @@
-#ifndef CSTD_DATASTRUCT_HASH_MAP_H
-#define CSTD_DATASTRUCT_HASH_MAP_H
+#ifndef CSTD_DATASTRUCT_HASHMAP_H
+#define CSTD_DATASTRUCT_HASHMAP_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -9,9 +9,9 @@
 /*
  * Hash map with separate chaining.
  *
- * cstd_hash_map
+ * cstd_hashmap
  * +--------------------------------------------------------------------------+
- * | size | key_size | value_size | capacity | buckets | hash | key_eq        |
+ * | size | key_size | value_size | capacity | buckets | key_eq               |
  * +--------------------------------------------------------------------------+
  *                                            |
  *                                            v
@@ -32,57 +32,59 @@
  * buckets[3] -> [kB,vB] -> [kC,vC] -> NULL
  */
 
-typedef size_t (*cstd_hash_map_hash_fn)(const void *key, size_t key_size);
-typedef bool (*cstd_hash_map_key_eq_fn)(const void *lhs, const void *rhs, size_t key_size);
+/* Key equality callback used to resolve collisions and lookups. */
+typedef bool (*cstd_hashmap_key_eq_fn)(const void *lhs, const void *rhs, size_t key_size);
 
-typedef struct cstd_hash_map_entry {
+/* One chained entry stored inside a bucket list. */
+typedef struct cstd_hashmap_entry {
     void *key;
     void *value;
-    struct cstd_hash_map_entry *next;
-} cstd_hash_map_entry;
+    struct cstd_hashmap_entry *next;
+} cstd_hashmap_entry;
 
-typedef struct cstd_hash_map {
+/* Hash map object and its bucket array metadata. */
+typedef struct cstd_hashmap {
     size_t size;
     size_t key_size;
     size_t value_size;
     size_t capacity;
-    cstd_hash_map_entry **buckets;
-    cstd_hash_map_hash_fn hash;
-    cstd_hash_map_key_eq_fn key_eq;
-} cstd_hash_map;
+    cstd_hashmap_entry **buckets;
+    cstd_hashmap_key_eq_fn key_eq;
+} cstd_hashmap;
 
 /*
- * Initialize a hash map with fixed key/value sizes and user callbacks.
+ * Initialize a hash map with fixed key/value sizes.
+ * Hashing uses the internal FNV-1a implementation.
  * Initial capacity is implementation-defined.
  */
-cstd_status cstd_hash_map_init(cstd_hash_map *map, size_t key_size, size_t value_size,
-                               cstd_hash_map_hash_fn hash, cstd_hash_map_key_eq_fn key_eq);
+cstd_status cstd_hashmap_init(cstd_hashmap *map, size_t key_size, size_t value_size,
+                              cstd_hashmap_key_eq_fn key_eq);
 
 /*
  * Insert or update an entry.
  * If key exists, overwrite value in place.
  */
-cstd_status cstd_hash_map_put(cstd_hash_map *map, const void *key, const void *value);
+cstd_status cstd_hashmap_put(cstd_hashmap *map, const void *key, const void *value);
 
 /*
  * Lookup key and copy value into out_value.
  */
-cstd_status cstd_hash_map_get(const cstd_hash_map *map, const void *key, void *out_value);
+cstd_status cstd_hashmap_get(const cstd_hashmap *map, const void *key, void *out_value);
 
 /*
- * Remove key and optionally copy removed value into out_value when out_value != NULL.
+ * Remove key from map.
  */
-cstd_status cstd_hash_map_remove(cstd_hash_map *map, const void *key, void *out_value);
+cstd_status cstd_hashmap_remove(cstd_hashmap *map, const void *key);
 
 /*
  * Release all entries and bucket storage, reset map to empty state.
  */
-cstd_status cstd_hash_map_free(cstd_hash_map *map);
+cstd_status cstd_hashmap_free(cstd_hashmap *map);
 
 /* Return the number of stored entries. */
-size_t cstd_hash_map_size(const cstd_hash_map *map);
+size_t cstd_hashmap_size(const cstd_hashmap *map);
 
 /* Return whether map has zero entries. */
-bool cstd_hash_map_is_empty(const cstd_hash_map *map);
+bool cstd_hashmap_is_empty(const cstd_hashmap *map);
 
 #endif
