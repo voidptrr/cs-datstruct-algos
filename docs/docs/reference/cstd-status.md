@@ -13,5 +13,6 @@
 | `CSTD_OK` | Success | Operation completed |
 | `CSTD_ERR_NULL` | Null pointer input | Required input pointer is `NULL` |
 | `CSTD_ERR_EMPTY` | Empty container state | Pop or peek on an empty container |
+| `CSTD_ERR_NOT_FOUND` | Missing key/item | Lookup or removal target does not exist |
 | `CSTD_ERR_RANGE` | Invalid value range | `elem_size == 0` in init |
 | `CSTD_ERR_STATE` | Invalid runtime state | Internal state does not permit operation |

@@ -30,10 +30,12 @@ nav:
   - cstd:
       - Overview: index.md
       - cstd.status: reference/cstd-status.md
+      - cstd.compare: reference/cstd-compare.md
       - cstd.mem:
           - cstd.mem.allocator: reference/cstd-mem-allocator.md
           - cstd.mem.bytes: reference/cstd-mem-bytes.md
       - cstd.datastruct:
+          - cstd.datastruct.hashmap: data-structures/hashmap.md
           - cstd.datastruct.binary_heap: data-structures/binary-heap.md
           - cstd.datastruct.vector: data-structures/vector.md
           - cstd.datastruct.queue: data-structures/queue.md
