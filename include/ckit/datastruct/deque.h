@@ -1,0 +1,56 @@
+#ifndef CKIT_DATASTRUCT_DEQUE_H
+#define CKIT_DATASTRUCT_DEQUE_H
+
+#include <stdbool.h>
+#include <stddef.h>
+
+#include "ckit/status.h"
+
+/*
+ * Generic FIFO deque backed by a circular buffer.
+ * +----------------------+----------------------+----------------------+
+ * | size (size_t)        | elem_size (size_t)   | capacity (size_t)    |
+ * +----------------------+----------------------+----------------------+
+ * | head (size_t)        | tail (size_t)        | buffer (void *)      |
+ * +----------------------+----------------------+----------------------+
+ */
+typedef struct ckit_deque {
+    size_t size;
+    size_t elem_size;
+    size_t capacity;
+    size_t head;
+    size_t tail;
+    void *buffer;
+} ckit_deque;
+
+/* Initialize a deque with element size elem_size. */
+ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size);
+
+/* Enqueue one element by copying elem_size bytes from element. */
+ckit_status ckit_deque_push(ckit_deque *deque, const void *element);
+
+/* Enqueue one element at the front by copying elem_size bytes from element. */
+ckit_status ckit_deque_pushfront(ckit_deque *deque, const void *element);
+
+/* Dequeue one element from the front into out. */
+ckit_status ckit_deque_popleft(ckit_deque *deque, void *out);
+
+/* Remove one element from the back into out. */
+ckit_status ckit_deque_popback(ckit_deque *deque, void *out);
+
+/* Copy one element from the front into out without removing it. */
+ckit_status ckit_deque_peekleft(const ckit_deque *deque, void *out);
+
+/* Copy one element from the back into out without removing it. */
+ckit_status ckit_deque_peekback(const ckit_deque *deque, void *out);
+
+/* Release owned storage and reset deque to an empty state. */
+ckit_status ckit_deque_free(ckit_deque *deque);
+
+/* Return the number of stored elements. */
+size_t ckit_deque_size(const ckit_deque *deque);
+
+/* Return whether the deque has zero elements. */
+bool ckit_deque_is_empty(const ckit_deque *deque);
+
+#endif

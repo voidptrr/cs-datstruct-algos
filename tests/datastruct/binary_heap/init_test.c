@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "cstd/datastruct/binary_heap.h"
+#include "ckit/datastruct/binary_heap.h"
 
 static int cmp_int_asc(const void *a, const void *b) {
     int lhs = *(const int *)a;
@@ -9,36 +9,36 @@ static int cmp_int_asc(const void *a, const void *b) {
 }
 
 int main(void) {
-    cstd_binary_heap heap;
+    ckit_binary_heap heap;
 
-    if (cstd_binary_heap_init(NULL, sizeof(int), cmp_int_asc) != CSTD_ERR_NULL) {
-        fprintf(stderr, "cstd_binary_heap_init(NULL, ...) should return CSTD_ERR_NULL\n");
+    if (ckit_binary_heap_init(NULL, sizeof(int), cmp_int_asc) != CKIT_ERR_NULL) {
+        fprintf(stderr, "ckit_binary_heap_init(NULL, ...) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
-    if (cstd_binary_heap_init(&heap, 0U, cmp_int_asc) != CSTD_ERR_RANGE) {
-        fprintf(stderr, "cstd_binary_heap_init(&heap, 0, ...) should return CSTD_ERR_RANGE\n");
+    if (ckit_binary_heap_init(&heap, 0U, cmp_int_asc) != CKIT_ERR_RANGE) {
+        fprintf(stderr, "ckit_binary_heap_init(&heap, 0, ...) should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
-    if (cstd_binary_heap_init(&heap, sizeof(int), NULL) != CSTD_ERR_NULL) {
-        fprintf(stderr, "cstd_binary_heap_init(&heap, ..., NULL) should return CSTD_ERR_NULL\n");
+    if (ckit_binary_heap_init(&heap, sizeof(int), NULL) != CKIT_ERR_NULL) {
+        fprintf(stderr, "ckit_binary_heap_init(&heap, ..., NULL) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
-    if (cstd_binary_heap_init(&heap, sizeof(int), cmp_int_asc) != CSTD_OK) {
-        fprintf(stderr, "cstd_binary_heap_init should return CSTD_OK\n");
+    if (ckit_binary_heap_init(&heap, sizeof(int), cmp_int_asc) != CKIT_OK) {
+        fprintf(stderr, "ckit_binary_heap_init should return CKIT_OK\n");
         return 1;
     }
 
-    if (!cstd_binary_heap_is_empty(&heap) || cstd_binary_heap_size(&heap) != 0U) {
+    if (!ckit_binary_heap_is_empty(&heap) || ckit_binary_heap_size(&heap) != 0U) {
         fprintf(stderr, "newly initialized heap should be empty\n");
-        cstd_binary_heap_free(&heap);
+        ckit_binary_heap_free(&heap);
         return 1;
     }
 
-    if (cstd_binary_heap_free(&heap) != CSTD_OK) {
-        fprintf(stderr, "cstd_binary_heap_free should return CSTD_OK\n");
+    if (ckit_binary_heap_free(&heap) != CKIT_OK) {
+        fprintf(stderr, "ckit_binary_heap_free should return CKIT_OK\n");
         return 1;
     }
 
