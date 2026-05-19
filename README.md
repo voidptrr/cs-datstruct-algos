@@ -1,3 +1,3 @@
-# cstd
+# ckit
 
-Documentation: https://voidptrr.github.io/cstd/
+Documentation: https://voidptrr.github.io/ckit/

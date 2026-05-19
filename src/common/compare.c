@@ -1,56 +1,56 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "cstd/compare.h"
+#include "ckit/compare.h"
 
-bool cstd_eq_bytes(const void *lhs, const void *rhs, size_t size) {
+bool ckit_eq_bytes(const void *lhs, const void *rhs, size_t size) {
     return memcmp(lhs, rhs, size) == 0;
 }
 
-bool cstd_eq_cstr(const void *lhs, const void *rhs, size_t size) {
+bool ckit_eq_cstr(const void *lhs, const void *rhs, size_t size) {
     (void)size;
     return strcmp((const char *)lhs, (const char *)rhs) == 0;
 }
 
-bool cstd_eq_i32(const void *lhs, const void *rhs, size_t size) {
+bool ckit_eq_i32(const void *lhs, const void *rhs, size_t size) {
     (void)size;
     return (*(const int32_t *)lhs) == (*(const int32_t *)rhs);
 }
 
-bool cstd_eq_i64(const void *lhs, const void *rhs, size_t size) {
+bool ckit_eq_i64(const void *lhs, const void *rhs, size_t size) {
     (void)size;
     return (*(const int64_t *)lhs) == (*(const int64_t *)rhs);
 }
 
-bool cstd_eq_u32(const void *lhs, const void *rhs, size_t size) {
+bool ckit_eq_u32(const void *lhs, const void *rhs, size_t size) {
     (void)size;
     return (*(const uint32_t *)lhs) == (*(const uint32_t *)rhs);
 }
 
-bool cstd_eq_u64(const void *lhs, const void *rhs, size_t size) {
+bool ckit_eq_u64(const void *lhs, const void *rhs, size_t size) {
     (void)size;
     return (*(const uint64_t *)lhs) == (*(const uint64_t *)rhs);
 }
 
-int cstd_cmp_i32(const void *lhs, const void *rhs) {
+int ckit_cmp_i32(const void *lhs, const void *rhs) {
     int32_t a = *(const int32_t *)lhs;
     int32_t b = *(const int32_t *)rhs;
     return (a > b) - (a < b);
 }
 
-int cstd_cmp_i64(const void *lhs, const void *rhs) {
+int ckit_cmp_i64(const void *lhs, const void *rhs) {
     int64_t a = *(const int64_t *)lhs;
     int64_t b = *(const int64_t *)rhs;
     return (a > b) - (a < b);
 }
 
-int cstd_cmp_u32(const void *lhs, const void *rhs) {
+int ckit_cmp_u32(const void *lhs, const void *rhs) {
     uint32_t a = *(const uint32_t *)lhs;
     uint32_t b = *(const uint32_t *)rhs;
     return (a > b) - (a < b);
 }
 
-int cstd_cmp_u64(const void *lhs, const void *rhs) {
+int ckit_cmp_u64(const void *lhs, const void *rhs) {
     uint64_t a = *(const uint64_t *)lhs;
     uint64_t b = *(const uint64_t *)rhs;
     return (a > b) - (a < b);

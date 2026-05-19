@@ -1,14 +1,14 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "cstd/datastruct/linked_list.h"
+#include "ckit/datastruct/linked_list.h"
 
 static int test_linked_list_init_null_pointer(void) {
-    cstd_status status;
+    ckit_status status;
 
-    status = cstd_linked_list_init(NULL, sizeof(int));
-    if (status != CSTD_ERR_NULL) {
-        fprintf(stderr, "cstd_linked_list_init(NULL, ...) should return CSTD_ERR_NULL\n");
+    status = ckit_linked_list_init(NULL, sizeof(int), NULL);
+    if (status != CKIT_ERR_NULL) {
+        fprintf(stderr, "ckit_linked_list_init(NULL, ..., NULL) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
@@ -16,24 +16,24 @@ static int test_linked_list_init_null_pointer(void) {
 }
 
 static int test_linked_list_init_valid_pointer(void) {
-    cstd_status status;
-    cstd_linked_list list;
+    ckit_status status;
+    ckit_linked_list list;
 
-    status = cstd_linked_list_init(&list, sizeof(int));
-    if (status != CSTD_OK) {
-        fprintf(stderr, "cstd_linked_list_init(&list, ...) should return CSTD_OK\n");
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
+    if (status != CKIT_OK) {
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
-    if (cstd_linked_list_size(&list) != 0 || list.elem_size != sizeof(int) || list.head != NULL ||
+    if (ckit_linked_list_size(&list) != 0 || list.elem_size != sizeof(int) || list.head != NULL ||
         list.tail != NULL) {
-        fprintf(stderr, "cstd_linked_list_init(&list, ...) returned invalid list state\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) returned invalid list state\n");
         return 1;
     }
 
-    status = cstd_linked_list_free(&list);
-    if (status != CSTD_OK) {
-        fprintf(stderr, "cstd_linked_list_free(&list) should return CSTD_OK\n");
+    status = ckit_linked_list_free(&list);
+    if (status != CKIT_OK) {
+        fprintf(stderr, "ckit_linked_list_free(&list) should return CKIT_OK\n");
         return 1;
     }
 
@@ -41,11 +41,11 @@ static int test_linked_list_init_valid_pointer(void) {
 }
 
 static int test_linked_list_init_zero_elem_size(void) {
-    cstd_linked_list list;
-    cstd_status status = cstd_linked_list_init(&list, 0);
+    ckit_linked_list list;
+    ckit_status status = ckit_linked_list_init(&list, 0, NULL);
 
-    if (status != CSTD_ERR_RANGE) {
-        fprintf(stderr, "cstd_linked_list_init(&list, 0) should return CSTD_ERR_RANGE\n");
+    if (status != CKIT_ERR_RANGE) {
+        fprintf(stderr, "ckit_linked_list_init(&list, 0, NULL) should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
@@ -53,38 +53,38 @@ static int test_linked_list_init_zero_elem_size(void) {
 }
 
 static int test_linked_list_is_empty(void) {
-    cstd_linked_list list;
+    ckit_linked_list list;
     int value = 1;
 
-    if (cstd_linked_list_is_empty(NULL) != true) {
-        fprintf(stderr, "cstd_linked_list_is_empty(NULL) should return true\n");
+    if (ckit_linked_list_is_empty(NULL) != true) {
+        fprintf(stderr, "ckit_linked_list_is_empty(NULL) should return true\n");
         return 1;
     }
 
-    if (cstd_linked_list_init(&list, sizeof(int)) != CSTD_OK) {
-        fprintf(stderr, "cstd_linked_list_init(&list, ...) should return CSTD_OK\n");
+    if (ckit_linked_list_init(&list, sizeof(int), NULL) != CKIT_OK) {
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
-    if (cstd_linked_list_is_empty(&list) != true) {
-        fprintf(stderr, "cstd_linked_list_is_empty(&list) should return true for empty list\n");
-        cstd_linked_list_free(&list);
+    if (ckit_linked_list_is_empty(&list) != true) {
+        fprintf(stderr, "ckit_linked_list_is_empty(&list) should return true for empty list\n");
+        ckit_linked_list_free(&list);
         return 1;
     }
 
-    if (cstd_linked_list_push(&list, &value) != CSTD_OK) {
-        fprintf(stderr, "cstd_linked_list_push(&list, &value) should return CSTD_OK\n");
-        cstd_linked_list_free(&list);
+    if (ckit_linked_list_push(&list, &value) != CKIT_OK) {
+        fprintf(stderr, "ckit_linked_list_push(&list, &value) should return CKIT_OK\n");
+        ckit_linked_list_free(&list);
         return 1;
     }
 
-    if (cstd_linked_list_is_empty(&list) != false) {
-        fprintf(stderr, "cstd_linked_list_is_empty(&list) should return false after push\n");
-        cstd_linked_list_free(&list);
+    if (ckit_linked_list_is_empty(&list) != false) {
+        fprintf(stderr, "ckit_linked_list_is_empty(&list) should return false after push\n");
+        ckit_linked_list_free(&list);
         return 1;
     }
 
-    cstd_linked_list_free(&list);
+    ckit_linked_list_free(&list);
     return 0;
 }
 

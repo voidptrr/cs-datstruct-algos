@@ -11,12 +11,5 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 add_compile_options(-Wall -Wextra -Wpedantic)
 
-option(CSTD_BUILD_BENCHMARKS "Build benchmark executables" ON)
-
 include(tooling/cmake/tests.cmake)
-cstd_discover_tests()
-
-if(CSTD_BUILD_BENCHMARKS)
-  include(tooling/cmake/benchmarks.cmake)
-  cstd_discover_benchmarks()
-endif()
+ckit_discover_tests()

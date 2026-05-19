@@ -1,16 +1,15 @@
 ---
 schema_version: 1
-project: cstd
+project: ckit
 defaults:
   validation_commands:
     - nix develop -c format-all
     - nix develop -c test-all
     - nix develop -c docs-build
   constraints:
-    - Use canonical includes under cstd/ (for example cstd/datastruct/queue.h and cstd/status.h).
-    - Do not introduce benchmark log artifact files.
+    - Use canonical includes under ckit/ (for example ckit/datastruct/deque.h and ckit/status.h).
     - Keep API behavior consistent across containers (null handling and empty handling).
-    - Follow commit subject style used in this repo: prefix-first lowercase, such as ds(queue): ..., bench: ..., docs: ..., chore: ....
+    - Follow commit subject style used in this repo: prefix-first lowercase, such as ds(deque): ..., bench: ..., docs: ..., chore: ....
   output_style:
     tone: concise
     include:
@@ -30,9 +29,6 @@ agents:
   - id: code-reviewer
     role: API consistency reviewer
     skill: .agents/skills/api-consistency/SKILL.md
-  - id: docs-benchmark-sync
-    role: Benchmark table synchronizer
-    skill: .agents/skills/benchmark-doc-sync/SKILL.md
 ---
 
 Machine-consumable agent policy for this repository.

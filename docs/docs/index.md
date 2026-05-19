@@ -1,12 +1,11 @@
-# cstd
+# ckit
 
-`cstd` is an enhanced C standard-library style layer built for reuse across projects.
-It provides common data structures with consistent behavior, predictable error handling,
-and a simple API model that is easy to adopt in low-level C codebases.
+`ckit` is a practical utilities and data-structures kit for C projects.
+It bundles reusable low-level building blocks with consistent behavior,
+predictable error handling, and a compact API style that stays easy to adopt.
 
 Core principles:
 
-- Reusable container primitives for everyday C development.
+- Reusable utilities and container primitives for everyday C development.
 - Common behavior contracts across data structures (null handling, empty handling, status returns).
-- Predictable performance characteristics with benchmark visibility.
 - Small, practical API surface focused on clarity and portability.

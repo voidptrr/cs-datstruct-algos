@@ -11,7 +11,7 @@ allowed-tools:
 
 ## Overview
 
-This skill reviews public API contracts for vector, queue, and linked_list to keep behavior uniform and easy to consume.
+This skill reviews public API contracts for vector, deque, and linked_list to keep behavior uniform and easy to consume.
 
 ## When to Use
 

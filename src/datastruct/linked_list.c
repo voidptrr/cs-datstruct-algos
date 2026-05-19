@@ -1,34 +1,58 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cstd/datastruct/linked_list.h"
-#include "cstd/mem/allocator.h"
+#include "ckit/datastruct/linked_list.h"
+#include "ckit/mem/allocators/allocator.h"
 
-cstd_status cstd_linked_list_init(cstd_linked_list *list, size_t elem_size) {
+static void *ckit_linked_list_alloc(const ckit_linked_list *list, size_t size) {
+    if (list->allocator == NULL || list->allocator->alloc == NULL) {
+        return ckit_malloc(size);
+    }
+    return list->allocator->alloc(list->allocator->ctx, size);
+}
+
+static void ckit_linked_list_dealloc(const ckit_linked_list *list, void *ptr) {
+    if (list->allocator == NULL || list->allocator->dealloc == NULL) {
+        free(ptr);
+        return;
+    }
+    list->allocator->dealloc(list->allocator->ctx, ptr);
+}
+
+ckit_status ckit_linked_list_init(ckit_linked_list *list, size_t elem_size,
+                                  ckit_allocator *allocator) {
     if (list == NULL) {
-        return CSTD_ERR_NULL;
+        return CKIT_ERR_NULL;
     }
 
     if (elem_size == 0) {
-        return CSTD_ERR_RANGE;
+        return CKIT_ERR_RANGE;
     }
 
     list->size = 0;
     list->elem_size = elem_size;
     list->head = NULL;
     list->tail = NULL;
+    list->allocator = allocator;
 
-    return CSTD_OK;
+    return CKIT_OK;
 }
 
-cstd_status cstd_linked_list_push(cstd_linked_list *list, const void *element) {
+ckit_status ckit_linked_list_push(ckit_linked_list *list, const void *element) {
     if (list == NULL || element == NULL) {
-        return CSTD_ERR_NULL;
+        return CKIT_ERR_NULL;
     }
 
-    cstd_linked_list_node *new_node = cstd_malloc(sizeof(cstd_linked_list_node));
+    ckit_linked_list_node *new_node = ckit_linked_list_alloc(list, sizeof(ckit_linked_list_node));
+    if (new_node == NULL) {
+        return CKIT_ERR_RANGE;
+    }
 
-    new_node->data = cstd_malloc(list->elem_size);
+    new_node->data = ckit_linked_list_alloc(list, list->elem_size);
+    if (new_node->data == NULL) {
+        ckit_linked_list_dealloc(list, new_node);
+        return CKIT_ERR_RANGE;
+    }
 
     memcpy(new_node->data, element, list->elem_size);
     new_node->next = NULL;
@@ -42,17 +66,24 @@ cstd_status cstd_linked_list_push(cstd_linked_list *list, const void *element) {
     list->tail = new_node;
     list->size += 1;
 
-    return CSTD_OK;
+    return CKIT_OK;
 }
 
-cstd_status cstd_linked_list_pushfront(cstd_linked_list *list, const void *element) {
+ckit_status ckit_linked_list_pushfront(ckit_linked_list *list, const void *element) {
     if (list == NULL || element == NULL) {
-        return CSTD_ERR_NULL;
+        return CKIT_ERR_NULL;
     }
 
-    cstd_linked_list_node *new_node = cstd_malloc(sizeof(cstd_linked_list_node));
+    ckit_linked_list_node *new_node = ckit_linked_list_alloc(list, sizeof(ckit_linked_list_node));
+    if (new_node == NULL) {
+        return CKIT_ERR_RANGE;
+    }
 
-    new_node->data = cstd_malloc(list->elem_size);
+    new_node->data = ckit_linked_list_alloc(list, list->elem_size);
+    if (new_node->data == NULL) {
+        ckit_linked_list_dealloc(list, new_node);
+        return CKIT_ERR_RANGE;
+    }
 
     memcpy(new_node->data, element, list->elem_size);
     new_node->next = list->head;
@@ -63,19 +94,19 @@ cstd_status cstd_linked_list_pushfront(cstd_linked_list *list, const void *eleme
     }
 
     list->size += 1;
-    return CSTD_OK;
+    return CKIT_OK;
 }
 
-cstd_status cstd_linked_list_popleft(cstd_linked_list *list, void *out) {
+ckit_status ckit_linked_list_popleft(ckit_linked_list *list, void *out) {
     if (list == NULL || out == NULL) {
-        return CSTD_ERR_NULL;
+        return CKIT_ERR_NULL;
     }
 
     if (list->head == NULL) {
-        return CSTD_ERR_EMPTY;
+        return CKIT_ERR_EMPTY;
     }
 
-    cstd_linked_list_node *old_head = list->head;
+    ckit_linked_list_node *old_head = list->head;
     memcpy(out, old_head->data, list->elem_size);
     list->head = old_head->next;
 
@@ -83,34 +114,35 @@ cstd_status cstd_linked_list_popleft(cstd_linked_list *list, void *out) {
         list->tail = NULL;
     }
 
-    free(old_head->data);
-    free(old_head);
+    ckit_linked_list_dealloc(list, old_head->data);
+    ckit_linked_list_dealloc(list, old_head);
     list->size -= 1;
 
-    return CSTD_OK;
+    return CKIT_OK;
 }
 
-cstd_status cstd_linked_list_free(cstd_linked_list *list) {
+ckit_status ckit_linked_list_free(ckit_linked_list *list) {
     if (list == NULL) {
-        return CSTD_ERR_NULL;
+        return CKIT_ERR_NULL;
     }
 
-    cstd_linked_list_node *curr = list->head;
+    ckit_linked_list_node *curr = list->head;
     while (curr != NULL) {
-        cstd_linked_list_node *next = curr->next;
-        free(curr->data);
-        free(curr);
+        ckit_linked_list_node *next = curr->next;
+        ckit_linked_list_dealloc(list, curr->data);
+        ckit_linked_list_dealloc(list, curr);
         curr = next;
     }
 
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
+    list->allocator = NULL;
 
-    return CSTD_OK;
+    return CKIT_OK;
 }
 
-size_t cstd_linked_list_size(const cstd_linked_list *list) {
+size_t ckit_linked_list_size(const ckit_linked_list *list) {
     if (list == NULL) {
         return 0;
     }
@@ -118,6 +150,6 @@ size_t cstd_linked_list_size(const cstd_linked_list *list) {
     return list->size;
 }
 
-bool cstd_linked_list_is_empty(const cstd_linked_list *list) {
-    return cstd_linked_list_size(list) == 0;
+bool ckit_linked_list_is_empty(const ckit_linked_list *list) {
+    return ckit_linked_list_size(list) == 0;
 }
