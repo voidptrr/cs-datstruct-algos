@@ -9,6 +9,21 @@
 #define CKIT_HASHMAP_MAX_LOAD_FACTOR_NUM 3U
 #define CKIT_HASHMAP_MAX_LOAD_FACTOR_DEN 4U
 
+static void *ckit_hashmap_alloc(const ckit_hashmap *map, size_t size) {
+    if (map->allocator == NULL || map->allocator->alloc == NULL) {
+        return ckit_malloc(size);
+    }
+    return map->allocator->alloc(map->allocator->ctx, size);
+}
+
+static void ckit_hashmap_dealloc(const ckit_hashmap *map, void *ptr) {
+    if (map->allocator == NULL || map->allocator->dealloc == NULL) {
+        free(ptr);
+        return;
+    }
+    map->allocator->dealloc(map->allocator->ctx, ptr);
+}
+
 static size_t ckit_hashmap_bucket_index(const ckit_hashmap *map, const void *key) {
     size_t hash = ckit_internal_fnv1a_hash(key, map->key_size);
     return hash % map->capacity;
@@ -19,8 +34,11 @@ static bool ckit_hashmap_should_grow(const ckit_hashmap *map) {
            map->capacity * CKIT_HASHMAP_MAX_LOAD_FACTOR_NUM;
 }
 
-static void ckit_hashmap_rehash(ckit_hashmap *map, size_t new_capacity) {
-    ckit_hashmap_entry **new_buckets = ckit_malloc(sizeof(*new_buckets) * new_capacity);
+static ckit_status ckit_hashmap_rehash(ckit_hashmap *map, size_t new_capacity) {
+    ckit_hashmap_entry **new_buckets = ckit_hashmap_alloc(map, sizeof(*new_buckets) * new_capacity);
+    if (new_buckets == NULL) {
+        return CKIT_ERR_RANGE;
+    }
     memset(new_buckets, 0, sizeof(*new_buckets) * new_capacity);
 
     for (size_t i = 0U; i < map->capacity; i++) {
@@ -36,13 +54,15 @@ static void ckit_hashmap_rehash(ckit_hashmap *map, size_t new_capacity) {
         }
     }
 
-    free(map->buckets);
+    ckit_hashmap_dealloc(map, map->buckets);
     map->buckets = new_buckets;
     map->capacity = new_capacity;
+
+    return CKIT_OK;
 }
 
 ckit_status ckit_hashmap_init(ckit_hashmap *map, size_t key_size, size_t value_size,
-                              ckit_hashmap_key_eq_fn key_eq) {
+                              ckit_hashmap_key_eq_fn key_eq, ckit_allocator *allocator) {
     if (map == NULL || key_eq == NULL) {
         return CKIT_ERR_NULL;
     }
@@ -50,7 +70,12 @@ ckit_status ckit_hashmap_init(ckit_hashmap *map, size_t key_size, size_t value_s
         return CKIT_ERR_RANGE;
     }
 
-    map->buckets = ckit_malloc(sizeof(*map->buckets) * CKIT_HASHMAP_DEFAULT_CAPACITY);
+    map->allocator = allocator;
+
+    map->buckets = ckit_hashmap_alloc(map, sizeof(*map->buckets) * CKIT_HASHMAP_DEFAULT_CAPACITY);
+    if (map->buckets == NULL) {
+        return CKIT_ERR_RANGE;
+    }
     memset(map->buckets, 0, sizeof(*map->buckets) * CKIT_HASHMAP_DEFAULT_CAPACITY);
 
     map->size = 0U;
@@ -79,13 +104,26 @@ ckit_status ckit_hashmap_put(ckit_hashmap *map, const void *key, const void *val
     }
 
     if (ckit_hashmap_should_grow(map)) {
-        ckit_hashmap_rehash(map, map->capacity * 2U);
+        ckit_status status = ckit_hashmap_rehash(map, map->capacity * 2U);
+        if (status != CKIT_OK) {
+            return status;
+        }
         bucket = ckit_hashmap_bucket_index(map, key);
     }
 
-    ckit_hashmap_entry *entry = ckit_malloc(sizeof(*entry));
-    entry->key = ckit_malloc(map->key_size);
-    entry->value = ckit_malloc(map->value_size);
+    ckit_hashmap_entry *entry = ckit_hashmap_alloc(map, sizeof(*entry));
+    if (entry == NULL) {
+        return CKIT_ERR_RANGE;
+    }
+
+    entry->key = ckit_hashmap_alloc(map, map->key_size);
+    entry->value = ckit_hashmap_alloc(map, map->value_size);
+    if (entry->key == NULL || entry->value == NULL) {
+        ckit_hashmap_dealloc(map, entry->key);
+        ckit_hashmap_dealloc(map, entry->value);
+        ckit_hashmap_dealloc(map, entry);
+        return CKIT_ERR_RANGE;
+    }
 
     memcpy(entry->key, key, map->key_size);
     memcpy(entry->value, value, map->value_size);
@@ -133,9 +171,9 @@ ckit_status ckit_hashmap_remove(ckit_hashmap *map, const void *key) {
                 prev->next = curr->next;
             }
 
-            free(curr->key);
-            free(curr->value);
-            free(curr);
+            ckit_hashmap_dealloc(map, curr->key);
+            ckit_hashmap_dealloc(map, curr->value);
+            ckit_hashmap_dealloc(map, curr);
             map->size -= 1U;
             return CKIT_OK;
         }
@@ -157,21 +195,22 @@ ckit_status ckit_hashmap_free(ckit_hashmap *map) {
             ckit_hashmap_entry *curr = map->buckets[i];
             while (curr != NULL) {
                 ckit_hashmap_entry *next = curr->next;
-                free(curr->key);
-                free(curr->value);
-                free(curr);
+                ckit_hashmap_dealloc(map, curr->key);
+                ckit_hashmap_dealloc(map, curr->value);
+                ckit_hashmap_dealloc(map, curr);
                 curr = next;
             }
         }
     }
 
-    free(map->buckets);
+    ckit_hashmap_dealloc(map, map->buckets);
     map->buckets = NULL;
     map->size = 0U;
     map->key_size = 0U;
     map->value_size = 0U;
     map->capacity = 0U;
     map->key_eq = NULL;
+    map->allocator = NULL;
 
     return CKIT_OK;
 }

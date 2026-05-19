@@ -18,9 +18,9 @@ static int test_deque_popleft_null_out(void) {
     ckit_status status;
     ckit_deque q;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -40,9 +40,9 @@ static int test_deque_popleft_empty_queue(void) {
     ckit_deque q;
     int out = 0;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -64,9 +64,9 @@ static int test_deque_popleft_fifo_order(void) {
     int out = 0;
     size_t i;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

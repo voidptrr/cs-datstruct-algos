@@ -18,9 +18,9 @@ static int test_deque_pushfront_null_element(void) {
     enum ckit_status status;
     struct ckit_deque q;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -41,9 +41,9 @@ static int test_deque_pushfront_empty_queue(void) {
     int value = 42;
     int out = 0;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -79,9 +79,9 @@ static int test_deque_pushfront_preserves_front_order(void) {
     int front = 0;
     int out = 0;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -123,9 +123,9 @@ static int test_deque_pushfront_wraparound_growth(void) {
     size_t initial_capacity;
     int out = 0;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

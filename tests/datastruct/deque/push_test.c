@@ -9,9 +9,9 @@ static int test_deque_push_appends_value(void) {
     ckit_deque q;
     int value = 42;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -55,9 +55,9 @@ static int test_deque_push_null_pointers(void) {
         return 1;
     }
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -81,9 +81,9 @@ static int test_deque_push_wraparound_growth(void) {
     size_t initial_capacity;
     size_t pop_count;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

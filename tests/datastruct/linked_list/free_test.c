@@ -19,9 +19,9 @@ static int test_linked_list_free_empty_list(void) {
     ckit_status status;
     ckit_linked_list list;
 
-    status = ckit_linked_list_init(&list, sizeof(int));
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -44,9 +44,9 @@ static int test_linked_list_free_populated_list(void) {
     ckit_linked_list list;
     int values[] = {1, 2, 3};
 
-    status = ckit_linked_list_init(&list, sizeof(int));
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

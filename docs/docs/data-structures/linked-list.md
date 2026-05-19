@@ -10,12 +10,14 @@ It supports insertion at head and tail and removal from head.
 ### ckit_linked_list_init
 
 ```c
-ckit_status ckit_linked_list_init(ckit_linked_list *list, size_t elem_size);
+ckit_status ckit_linked_list_init(ckit_linked_list *list, size_t elem_size,
+                                  ckit_allocator *allocator);
 ```
 
-- Parameters: `list`, `elem_size`
+- Parameters: `list`, `elem_size`, `allocator`
 - Returns: CKIT_OK on success.
 - Errors: CKIT_ERR_NULL if `list` is `NULL`; CKIT_ERR_RANGE if `elem_size == 0`.
+- Notes: when `allocator` is `NULL`, linked list uses default `ckit_malloc` backing.
 
 ### ckit_linked_list_push
 

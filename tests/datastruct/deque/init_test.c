@@ -7,9 +7,9 @@
 static int test_deque_init_null_pointer(void) {
     ckit_status status;
 
-    status = ckit_deque_init(NULL, sizeof(int));
+    status = ckit_deque_init(NULL, sizeof(int), NULL);
     if (status != CKIT_ERR_NULL) {
-        fprintf(stderr, "ckit_deque_init(NULL, ...) should return CKIT_ERR_NULL\n");
+        fprintf(stderr, "ckit_deque_init(NULL, ..., NULL) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
@@ -20,15 +20,15 @@ static int test_deque_init_valid_pointer(void) {
     ckit_status status;
     ckit_deque q;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
     if (q.buffer == NULL || q.size != 0 || q.elem_size != sizeof(int) || q.capacity != 16 ||
         q.head != 0 || q.tail != 0) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) returned invalid deque state\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) returned invalid deque state\n");
         free(q.buffer);
         return 1;
     }
@@ -39,10 +39,10 @@ static int test_deque_init_valid_pointer(void) {
 
 static int test_deque_init_zero_elem_size(void) {
     ckit_deque q;
-    ckit_status status = ckit_deque_init(&q, 0);
+    ckit_status status = ckit_deque_init(&q, 0, NULL);
 
     if (status != CKIT_ERR_RANGE) {
-        fprintf(stderr, "ckit_deque_init(&q, 0) should return CKIT_ERR_RANGE\n");
+        fprintf(stderr, "ckit_deque_init(&q, 0, NULL) should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
@@ -58,8 +58,8 @@ static int test_deque_is_empty(void) {
         return 1;
     }
 
-    if (ckit_deque_init(&q, sizeof(int)) != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+    if (ckit_deque_init(&q, sizeof(int), NULL) != CKIT_OK) {
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

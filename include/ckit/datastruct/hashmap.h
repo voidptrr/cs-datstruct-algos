@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "ckit/mem/allocators/allocator.h"
 #include "ckit/status.h"
 
 /*
@@ -50,6 +51,7 @@ typedef struct ckit_hashmap {
     size_t capacity;
     ckit_hashmap_entry **buckets;
     ckit_hashmap_key_eq_fn key_eq;
+    ckit_allocator *allocator;
 } ckit_hashmap;
 
 /*
@@ -58,7 +60,7 @@ typedef struct ckit_hashmap {
  * Initial capacity is implementation-defined.
  */
 ckit_status ckit_hashmap_init(ckit_hashmap *map, size_t key_size, size_t value_size,
-                              ckit_hashmap_key_eq_fn key_eq);
+                              ckit_hashmap_key_eq_fn key_eq, ckit_allocator *allocator);
 
 /*
  * Insert or update an entry.

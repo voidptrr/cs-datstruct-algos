@@ -4,7 +4,7 @@
 
 static int test_linked_list_pushfront_null_pointers(void) {
     ckit_linked_list list;
-    ckit_status status = ckit_linked_list_init(&list, sizeof(int));
+    ckit_status status = ckit_linked_list_init(&list, sizeof(int), NULL);
     int value = 1;
 
     if (status != CKIT_OK) {
@@ -33,7 +33,7 @@ static int test_linked_list_pushfront_orders_values(void) {
     int first = 1;
     int second = 2;
 
-    if (ckit_linked_list_init(&list, sizeof(int)) != CKIT_OK) {
+    if (ckit_linked_list_init(&list, sizeof(int), NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_linked_list_init should return CKIT_OK\n");
         return 1;
     }

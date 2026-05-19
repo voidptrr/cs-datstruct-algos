@@ -21,7 +21,7 @@ int main(void) {
         return 1;
     }
 
-    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64) != CKIT_OK) {
+    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64, NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_hashmap_init should return CKIT_OK\n");
         return 1;
     }

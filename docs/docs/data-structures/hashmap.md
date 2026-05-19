@@ -13,12 +13,14 @@ Hashing uses an internal FNV-1a function; key equality is provided by a caller c
 ckit_status ckit_hashmap_init(ckit_hashmap *map,
                               size_t key_size,
                               size_t value_size,
-                              ckit_hashmap_key_eq_fn key_eq);
+                              ckit_hashmap_key_eq_fn key_eq,
+                              ckit_allocator *allocator);
 ```
 
-- Parameters: `map`, `key_size`, `value_size`, `key_eq`
+- Parameters: `map`, `key_size`, `value_size`, `key_eq`, `allocator`
 - Returns: `CKIT_OK` on success.
 - Errors: `CKIT_ERR_NULL` if `map` or `key_eq` is `NULL`; `CKIT_ERR_RANGE` if `key_size == 0` or `value_size == 0`.
+- Notes: when `allocator` is `NULL`, hashmap uses default allocator backing.
 
 ### ckit_hashmap_put
 
@@ -95,7 +97,7 @@ int main(void) {
     uint64_t value = 9001U;
     uint64_t out = 0U;
 
-    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64) != CKIT_OK) {
+    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64, NULL) != CKIT_OK) {
         return 1;
     }
     if (ckit_hashmap_put(&map, &key, &value) != CKIT_OK) {

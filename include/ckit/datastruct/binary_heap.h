@@ -24,7 +24,8 @@ typedef struct ckit_binary_heap {
 } ckit_binary_heap;
 
 /* Initialize a heap for elements of size elem_size using cmp ordering. */
-ckit_status ckit_binary_heap_init(ckit_binary_heap *heap, size_t elem_size, ckit_heap_cmp_fn cmp);
+ckit_status ckit_binary_heap_init(ckit_binary_heap *heap, size_t elem_size, ckit_heap_cmp_fn cmp,
+                                  ckit_allocator *allocator);
 
 /* Insert one element by copying elem_size bytes from element. */
 ckit_status ckit_binary_heap_push(ckit_binary_heap *heap, const void *element);

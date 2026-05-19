@@ -14,9 +14,9 @@ static int test_linked_list_push_null_pointers(void) {
         return 1;
     }
 
-    status = ckit_linked_list_init(&list, sizeof(int));
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -40,9 +40,9 @@ static int test_linked_list_push_single_value(void) {
     ckit_linked_list list;
     int value = 42;
 
-    status = ckit_linked_list_init(&list, sizeof(int));
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -80,9 +80,9 @@ static int test_linked_list_push_appends_and_copies(void) {
     int first = 7;
     int second = 11;
 
-    status = ckit_linked_list_init(&list, sizeof(int));
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "ckit/mem/allocators/allocator.h"
 #include "ckit/status.h"
 
 /*
@@ -25,10 +26,12 @@ typedef struct ckit_linked_list {
     size_t elem_size;
     ckit_linked_list_node *head;
     ckit_linked_list_node *tail;
+    ckit_allocator *allocator;
 } ckit_linked_list;
 
 /* Initialize a linked list with element size elem_size. */
-ckit_status ckit_linked_list_init(ckit_linked_list *list, size_t elem_size);
+ckit_status ckit_linked_list_init(ckit_linked_list *list, size_t elem_size,
+                                  ckit_allocator *allocator);
 
 /* Append one element by copying elem_size bytes from element. */
 ckit_status ckit_linked_list_push(ckit_linked_list *list, const void *element);

@@ -7,11 +7,29 @@
 
 #define CKIT_DEQUE_DEFAULT_CAPACITY 16
 
+static void *ckit_deque_alloc(const ckit_deque *deque, size_t size) {
+    if (deque->allocator == NULL || deque->allocator->alloc == NULL) {
+        return ckit_malloc(size);
+    }
+    return deque->allocator->alloc(deque->allocator->ctx, size);
+}
+
+static void ckit_deque_dealloc(const ckit_deque *deque, void *ptr) {
+    if (deque->allocator == NULL || deque->allocator->dealloc == NULL) {
+        free(ptr);
+        return;
+    }
+    deque->allocator->dealloc(deque->allocator->ctx, ptr);
+}
+
 static ckit_status ckit_deque_grow(ckit_deque *deque) {
     size_t old_capacity = deque->capacity;
     size_t new_capacity = old_capacity * 2;
     uint8_t *old_buffer = (uint8_t *)deque->buffer;
-    uint8_t *new_buffer = ckit_malloc(new_capacity * deque->elem_size);
+    uint8_t *new_buffer = ckit_deque_alloc(deque, new_capacity * deque->elem_size);
+    if (new_buffer == NULL) {
+        return CKIT_ERR_RANGE;
+    }
 
     if (deque->size > 0) {
         if (deque->head < deque->tail) {
@@ -30,7 +48,7 @@ static ckit_status ckit_deque_grow(ckit_deque *deque) {
         }
     }
 
-    free(deque->buffer);
+    ckit_deque_dealloc(deque, deque->buffer);
     deque->buffer = new_buffer;
     deque->capacity = new_capacity;
     deque->head = 0;
@@ -39,7 +57,7 @@ static ckit_status ckit_deque_grow(ckit_deque *deque) {
     return CKIT_OK;
 }
 
-ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size) {
+ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size, ckit_allocator *allocator) {
     if (deque == NULL) {
         return CKIT_ERR_NULL;
     }
@@ -48,7 +66,12 @@ ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size) {
         return CKIT_ERR_RANGE;
     }
 
-    void *buffer = ckit_malloc(elem_size * CKIT_DEQUE_DEFAULT_CAPACITY);
+    deque->allocator = allocator;
+
+    void *buffer = ckit_deque_alloc(deque, elem_size * CKIT_DEQUE_DEFAULT_CAPACITY);
+    if (buffer == NULL) {
+        return CKIT_ERR_RANGE;
+    }
 
     deque->size = 0;
     deque->elem_size = elem_size;
@@ -180,12 +203,13 @@ ckit_status ckit_deque_free(ckit_deque *deque) {
         return CKIT_ERR_NULL;
     }
 
-    free(deque->buffer);
+    ckit_deque_dealloc(deque, deque->buffer);
     deque->buffer = NULL;
     deque->size = 0;
     deque->capacity = 0;
     deque->head = 0;
     deque->tail = 0;
+    deque->allocator = NULL;
 
     return CKIT_OK;
 }

@@ -10,12 +10,13 @@ It supports front and back insertion/removal and read-only peeks on both ends.
 ### ckit_deque_init
 
 ```c
-ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size);
+ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size, ckit_allocator *allocator);
 ```
 
-- Parameters: `deque`, `elem_size`
+- Parameters: `deque`, `elem_size`, `allocator`
 - Returns: CKIT_OK on success.
 - Errors: CKIT_ERR_NULL if `deque` is `NULL`; CKIT_ERR_RANGE if `elem_size == 0`.
+- Notes: when `allocator` is `NULL`, deque uses default `ckit_malloc` backing.
 
 ### ckit_deque_push
 

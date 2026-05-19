@@ -6,7 +6,7 @@ static int test_linked_list_popleft_null_pointers(void) {
     ckit_linked_list list;
     int out = 0;
 
-    if (ckit_linked_list_init(&list, sizeof(int)) != CKIT_OK) {
+    if (ckit_linked_list_init(&list, sizeof(int), NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_linked_list_init should return CKIT_OK\n");
         return 1;
     }
@@ -31,7 +31,7 @@ static int test_linked_list_popleft_empty(void) {
     ckit_linked_list list;
     int out = 0;
 
-    if (ckit_linked_list_init(&list, sizeof(int)) != CKIT_OK) {
+    if (ckit_linked_list_init(&list, sizeof(int), NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_linked_list_init should return CKIT_OK\n");
         return 1;
     }
@@ -52,7 +52,7 @@ static int test_linked_list_popleft_fifo_behavior(void) {
     int second = 9;
     int out = 0;
 
-    if (ckit_linked_list_init(&list, sizeof(int)) != CKIT_OK) {
+    if (ckit_linked_list_init(&list, sizeof(int), NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_linked_list_init should return CKIT_OK\n");
         return 1;
     }

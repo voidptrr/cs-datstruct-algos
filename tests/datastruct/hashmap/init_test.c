@@ -7,27 +7,27 @@
 int main(void) {
     ckit_hashmap map;
 
-    if (ckit_hashmap_init(NULL, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64) != CKIT_ERR_NULL) {
+    if (ckit_hashmap_init(NULL, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64, NULL) != CKIT_ERR_NULL) {
         fprintf(stderr, "ckit_hashmap_init(NULL, ...) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
-    if (ckit_hashmap_init(&map, 0U, sizeof(uint64_t), ckit_eq_u64) != CKIT_ERR_RANGE) {
+    if (ckit_hashmap_init(&map, 0U, sizeof(uint64_t), ckit_eq_u64, NULL) != CKIT_ERR_RANGE) {
         fprintf(stderr, "ckit_hashmap_init key_size=0 should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
-    if (ckit_hashmap_init(&map, sizeof(uint64_t), 0U, ckit_eq_u64) != CKIT_ERR_RANGE) {
+    if (ckit_hashmap_init(&map, sizeof(uint64_t), 0U, ckit_eq_u64, NULL) != CKIT_ERR_RANGE) {
         fprintf(stderr, "ckit_hashmap_init value_size=0 should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
-    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), NULL) != CKIT_ERR_NULL) {
+    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), NULL, NULL) != CKIT_ERR_NULL) {
         fprintf(stderr, "ckit_hashmap_init NULL key_eq should return CKIT_ERR_NULL\n");
         return 1;
     }
 
-    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64) != CKIT_OK) {
+    if (ckit_hashmap_init(&map, sizeof(uint64_t), sizeof(uint64_t), ckit_eq_u64, NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_hashmap_init valid args should return CKIT_OK\n");
         return 1;
     }

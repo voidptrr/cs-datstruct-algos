@@ -55,7 +55,8 @@ static void ckit_binary_heap_sift_down(ckit_binary_heap *heap, size_t idx) {
     }
 }
 
-ckit_status ckit_binary_heap_init(ckit_binary_heap *heap, size_t elem_size, ckit_heap_cmp_fn cmp) {
+ckit_status ckit_binary_heap_init(ckit_binary_heap *heap, size_t elem_size, ckit_heap_cmp_fn cmp,
+                                  ckit_allocator *allocator) {
     if (heap == NULL || cmp == NULL) {
         return CKIT_ERR_NULL;
     }
@@ -63,7 +64,7 @@ ckit_status ckit_binary_heap_init(ckit_binary_heap *heap, size_t elem_size, ckit
         return CKIT_ERR_RANGE;
     }
 
-    ckit_status status = ckit_vector_init(&heap->root, elem_size, NULL);
+    ckit_status status = ckit_vector_init(&heap->root, elem_size, allocator);
     if (status != CKIT_OK) {
         return status;
     }

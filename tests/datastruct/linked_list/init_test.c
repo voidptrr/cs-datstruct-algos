@@ -6,9 +6,9 @@
 static int test_linked_list_init_null_pointer(void) {
     ckit_status status;
 
-    status = ckit_linked_list_init(NULL, sizeof(int));
+    status = ckit_linked_list_init(NULL, sizeof(int), NULL);
     if (status != CKIT_ERR_NULL) {
-        fprintf(stderr, "ckit_linked_list_init(NULL, ...) should return CKIT_ERR_NULL\n");
+        fprintf(stderr, "ckit_linked_list_init(NULL, ..., NULL) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
@@ -19,15 +19,15 @@ static int test_linked_list_init_valid_pointer(void) {
     ckit_status status;
     ckit_linked_list list;
 
-    status = ckit_linked_list_init(&list, sizeof(int));
+    status = ckit_linked_list_init(&list, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
     if (ckit_linked_list_size(&list) != 0 || list.elem_size != sizeof(int) || list.head != NULL ||
         list.tail != NULL) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) returned invalid list state\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) returned invalid list state\n");
         return 1;
     }
 
@@ -42,10 +42,10 @@ static int test_linked_list_init_valid_pointer(void) {
 
 static int test_linked_list_init_zero_elem_size(void) {
     ckit_linked_list list;
-    ckit_status status = ckit_linked_list_init(&list, 0);
+    ckit_status status = ckit_linked_list_init(&list, 0, NULL);
 
     if (status != CKIT_ERR_RANGE) {
-        fprintf(stderr, "ckit_linked_list_init(&list, 0) should return CKIT_ERR_RANGE\n");
+        fprintf(stderr, "ckit_linked_list_init(&list, 0, NULL) should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
@@ -61,8 +61,8 @@ static int test_linked_list_is_empty(void) {
         return 1;
     }
 
-    if (ckit_linked_list_init(&list, sizeof(int)) != CKIT_OK) {
-        fprintf(stderr, "ckit_linked_list_init(&list, ...) should return CKIT_OK\n");
+    if (ckit_linked_list_init(&list, sizeof(int), NULL) != CKIT_OK) {
+        fprintf(stderr, "ckit_linked_list_init(&list, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

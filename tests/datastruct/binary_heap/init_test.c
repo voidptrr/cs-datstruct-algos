@@ -11,22 +11,22 @@ static int cmp_int_asc(const void *a, const void *b) {
 int main(void) {
     ckit_binary_heap heap;
 
-    if (ckit_binary_heap_init(NULL, sizeof(int), cmp_int_asc) != CKIT_ERR_NULL) {
+    if (ckit_binary_heap_init(NULL, sizeof(int), cmp_int_asc, NULL) != CKIT_ERR_NULL) {
         fprintf(stderr, "ckit_binary_heap_init(NULL, ...) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
-    if (ckit_binary_heap_init(&heap, 0U, cmp_int_asc) != CKIT_ERR_RANGE) {
-        fprintf(stderr, "ckit_binary_heap_init(&heap, 0, ...) should return CKIT_ERR_RANGE\n");
+    if (ckit_binary_heap_init(&heap, 0U, cmp_int_asc, NULL) != CKIT_ERR_RANGE) {
+        fprintf(stderr, "ckit_binary_heap_init(&heap, 0, ..., NULL) should return CKIT_ERR_RANGE\n");
         return 1;
     }
 
-    if (ckit_binary_heap_init(&heap, sizeof(int), NULL) != CKIT_ERR_NULL) {
-        fprintf(stderr, "ckit_binary_heap_init(&heap, ..., NULL) should return CKIT_ERR_NULL\n");
+    if (ckit_binary_heap_init(&heap, sizeof(int), NULL, NULL) != CKIT_ERR_NULL) {
+        fprintf(stderr, "ckit_binary_heap_init(&heap, ..., NULL, NULL) should return CKIT_ERR_NULL\n");
         return 1;
     }
 
-    if (ckit_binary_heap_init(&heap, sizeof(int), cmp_int_asc) != CKIT_OK) {
+    if (ckit_binary_heap_init(&heap, sizeof(int), cmp_int_asc, NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_binary_heap_init should return CKIT_OK\n");
         return 1;
     }

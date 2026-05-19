@@ -17,7 +17,7 @@ int main(void) {
         return 1;
     }
 
-    if (ckit_binary_heap_init(&heap, sizeof(int), cmp_int_asc) != CKIT_OK) {
+    if (ckit_binary_heap_init(&heap, sizeof(int), cmp_int_asc, NULL) != CKIT_OK) {
         fprintf(stderr, "ckit_binary_heap_init should return CKIT_OK\n");
         return 1;
     }

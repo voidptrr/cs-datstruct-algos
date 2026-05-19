@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "ckit/mem/allocators/allocator.h"
 #include "ckit/status.h"
 
 /*
@@ -21,10 +22,11 @@ typedef struct ckit_deque {
     size_t head;
     size_t tail;
     void *buffer;
+    ckit_allocator *allocator;
 } ckit_deque;
 
 /* Initialize a deque with element size elem_size. */
-ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size);
+ckit_status ckit_deque_init(ckit_deque *deque, size_t elem_size, ckit_allocator *allocator);
 
 /* Enqueue one element by copying elem_size bytes from element. */
 ckit_status ckit_deque_push(ckit_deque *deque, const void *element);

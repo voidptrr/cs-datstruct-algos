@@ -32,9 +32,9 @@ static int test_deque_free_valid_queue(void) {
     ckit_status status;
     ckit_deque q;
 
-    status = ckit_deque_init(&q, sizeof(int));
+    status = ckit_deque_init(&q, sizeof(int), NULL);
     if (status != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 

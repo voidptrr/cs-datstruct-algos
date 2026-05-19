@@ -11,8 +11,8 @@ static int test_deque_peekleft_null_args(void) {
         return 1;
     }
 
-    if (ckit_deque_init(&q, sizeof(int)) != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+    if (ckit_deque_init(&q, sizeof(int), NULL) != CKIT_OK) {
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -30,8 +30,8 @@ static int test_deque_peekleft_empty_queue(void) {
     ckit_deque q;
     int out = 0;
 
-    if (ckit_deque_init(&q, sizeof(int)) != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+    if (ckit_deque_init(&q, sizeof(int), NULL) != CKIT_OK) {
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
@@ -51,8 +51,8 @@ static int test_deque_peekleft_does_not_remove(void) {
     int second = 7;
     int out = 0;
 
-    if (ckit_deque_init(&q, sizeof(int)) != CKIT_OK) {
-        fprintf(stderr, "ckit_deque_init(&q, ...) should return CKIT_OK\n");
+    if (ckit_deque_init(&q, sizeof(int), NULL) != CKIT_OK) {
+        fprintf(stderr, "ckit_deque_init(&q, ..., NULL) should return CKIT_OK\n");
         return 1;
     }
 
